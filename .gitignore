@@ -1,0 +1,21 @@
+# ── Internal AI/prompt tooling (not part of the website) ──
+.github/prompts/
+
+# ── OS / editor junk ──
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+
+# ── Logs & temp ──
+*.log
+_shot_*.png
+tmp/
+temp/
+
+# ── Local env / secrets (never commit) ──
+.env
+.env.*
+*.local
+config.local.php

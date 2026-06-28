@@ -1,0 +1,67 @@
+/* =============================================================
+   VARIABLES.CSS — Sun Crew Energy Website
+   Brand tokens, typography, spacing, shadows
+   ============================================================= */
+
+:root {
+    /* ── Brand Colors — Suncrew Energy brand identity ── */
+    /* Suncrew Gold — accent / primary action */
+    --primary:          #E9B41E;
+    --primary-dark:     #B6850C;
+    --primary-hover:    #F2C544;
+    --primary-light:    rgba(233, 180, 30, 0.12);
+    --primary-border:   rgba(233, 180, 30, 0.30);
+
+    /* Solar Navy — brand lead */
+    --secondary:        #16304F;
+    --secondary-light:  #24486B;
+
+    /* Slate Blue — supporting */
+    --accent:           #5C6E89;
+
+    --dark:             #0E2238;
+    --dark-2:           #16304F;
+    --dark-3:           #24486B;
+
+    --light:            #FFFFFF;
+    --gray-50:          #F7F8FA;
+    --gray-100:         #F1F3F6;
+    --gray-200:         #E2E6EC;
+    --gray-300:         #CBD3DE;
+    --gray-400:         #94A1B2;
+    --black-500:         #5F6E82;
+    --gray-600:         #44546A;
+    --gray-700:         #2C3B4F;
+
+    --success:          #10B981;
+    --whatsapp:         #25D366;
+    --whatsapp-dark:    #128C7E;
+
+    /* ── Typography ── */
+    --font:             'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    /* ── Spacing ── */
+    --section-py:       5rem;
+
+    /* ── Navbar ── */
+    --navbar-h:         72px;
+
+    /* ── Border Radius ── */
+    --radius-sm:        0.375rem;
+    --radius:           0.625rem;
+    --radius-md:        0.75rem;
+    --radius-lg:        1rem;
+    --radius-xl:        1.5rem;
+    --radius-full:      9999px;
+
+    /* ── Transitions ── */
+    --transition:       all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast:  all 0.15s ease;
+
+    /* ── Shadows ── */
+    --shadow-sm:        0 1px 2px rgba(0,0,0,0.05);
+    --shadow:           0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md:        0 4px 8px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+    --shadow-lg:        0 10px 20px rgba(0,0,0,0.09), 0 4px 8px rgba(0,0,0,0.04);
+    --shadow-xl:        0 20px 40px rgba(0,0,0,0.10), 0 8px 16px rgba(0,0,0,0.05);
+}
