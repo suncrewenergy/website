@@ -19,3 +19,8 @@ temp/
 .env.*
 *.local
 config.local.php
+forms/config.php
+
+# ── Composer dependencies (run `composer install` on server) ──
+/vendor/
+composer.lock

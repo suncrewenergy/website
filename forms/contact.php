@@ -4,12 +4,23 @@
  * Processes inquiry form submissions:
  *  1. Validates required fields
  *  2. Sanitizes all input
- *  3. Sends email to company address
+ *  3. Sends email via authenticated SMTP (PHPMailer)
  *  4. Redirects to thank-you.html on success
  */
 
-// ── Config ──────────────────────────────────────────────────────────
-define('RECEIVER_EMAIL', 'info@suncrewenergy.com');      // ← update before launch
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// ── Load dependencies & config ───────────────────────────────────────
+require __DIR__ . '/../vendor/autoload.php';   // composer install (PHPMailer)
+
+$configFile = __DIR__ . '/config.php';
+if (!is_file($configFile)) {
+    http_response_code(500);
+    exit('Mailer not configured.');
+}
+$config = require $configFile;
+
 define('SITE_NAME',      'Sun Crew Energy');
 define('THANK_YOU_URL',  '../thank-you.html');
 define('ERROR_URL',      '../contact.html?error=1');
@@ -83,7 +94,7 @@ if (!empty($errors)) {
     exit;
 }
 
-// ── Build email ──────────────────────────────────────────────────────
+// ── Build email body ─────────────────────────────────────────────────
 $subject  = SITE_NAME . ' — New Inquiry from ' . $name;
 
 $body  = "A new inquiry has been submitted via the Sun Crew Energy website.\n\n";
@@ -99,13 +110,33 @@ $body .= "Message:\n"       . $message . "\n";
 $body .= "────────────────────────────────────\n";
 $body .= "Submitted at : " . date('Y-m-d H:i:s T') . "\n";
 
-$headers  = "From: " . SITE_NAME . " <noreply@suncrewenergy.com>\r\n";
-$headers .= "Reply-To: " . $email . "\r\n";
-$headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
-$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+// ── Send via authenticated SMTP ──────────────────────────────────────
+$mail = new PHPMailer(true);
 
-// ── Send ─────────────────────────────────────────────────────────────
-$sent = mail(RECEIVER_EMAIL, $subject, $body, $headers);
+try {
+    $mail->isSMTP();
+    $mail->Host       = $config['SMTP_HOST'];
+    $mail->SMTPAuth   = true;
+    $mail->Username   = $config['SMTP_USER'];
+    $mail->Password   = $config['SMTP_PASS'];
+    $mail->SMTPSecure = $config['SMTP_SECURE']; // 'ssl' or 'tls'
+    $mail->Port       = (int) $config['SMTP_PORT'];
+    $mail->CharSet    = 'UTF-8';
+
+    // From must be the authenticated mailbox (SPF/DKIM aligned)
+    $mail->setFrom($config['SMTP_USER'], SITE_NAME . ' Website');
+    $mail->addAddress($config['RECEIVER_EMAIL']);
+    $mail->addReplyTo($email, $name);   // reply goes to the visitor
+
+    $mail->Subject = $subject;
+    $mail->Body    = $body;
+
+    $mail->send();
+    $sent = true;
+} catch (Exception $e) {
+    $sent = false;
+    error_log('Contact form mail error: ' . $mail->ErrorInfo);
+}
 
 $_SESSION['last_submission'] = $now;
 
