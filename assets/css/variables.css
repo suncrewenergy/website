@@ -19,6 +19,11 @@
     /* Slate Blue — supporting */
     --accent:           #5C6E89;
 
+    /* Additional approved brand blues (from official identity / business card) */
+    --ocean:            #015A86;   /* vivid steel blue — accent shapes */
+    --ocean-deep:       #00476F;   /* deep steel navy */
+    --navy-rich:        #18365C;   /* rich base navy */
+
     --dark:             #0E2238;
     --dark-2:           #16304F;
     --dark-3:           #24486B;

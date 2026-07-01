@@ -11,6 +11,7 @@ desktop.ini
 # ── Logs & temp ──
 *.log
 _shot_*.png
+_*.ps1
 tmp/
 temp/
 

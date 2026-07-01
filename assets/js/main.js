@@ -143,3 +143,60 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
+/* ─── HERO VIDEO: load portrait on mobile, landscape on desktop ──────
+ * Only the needed file is downloaded (not both). Falls back to the
+ * poster image when reduced-motion is requested or autoplay is blocked.
+ */
+document.addEventListener('DOMContentLoaded', function () {
+
+    const video = document.getElementById('heroVideo');
+    if (!video) return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return; // CSS hides the video; poster image shows instead
+
+    // Per orientation. MP4 (H.264) is universally supported (incl. iOS Safari)
+    // and here is smaller than the source WebM, so it is used everywhere.
+    const SOURCES = {
+        landscape: [
+            { src: 'assets/videos/hero-landscape.mp4', type: 'video/mp4' }
+        ],
+        portrait: [
+            { src: 'assets/videos/hero-portrait.mp4', type: 'video/mp4' }
+        ]
+    };
+
+    function chooseOrientation() {
+        const portrait = window.matchMedia('(max-width: 767px)').matches
+            || window.innerHeight > window.innerWidth;
+        return portrait ? 'portrait' : 'landscape';
+    }
+
+    function applySource() {
+        const orientation = chooseOrientation();
+        if (video.getAttribute('data-current') === orientation) return;
+        video.setAttribute('data-current', orientation);
+
+        while (video.firstChild) { video.removeChild(video.firstChild); }
+        SOURCES[orientation].forEach(function (s) {
+            const el = document.createElement('source');
+            el.src = s.src;
+            el.type = s.type;
+            video.appendChild(el);
+        });
+
+        video.load();
+        const p = video.play();
+        if (p && typeof p.catch === 'function') { p.catch(function () {}); }
+    }
+
+    applySource();
+
+    let resizeTimer;
+    window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(applySource, 300);
+    });
+
+});
